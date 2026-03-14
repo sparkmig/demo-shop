@@ -9,14 +9,14 @@ namespace OrderService.Domain.FulfillOrder
 {
     public record FulfillOrderCommand(Guid OrderId);
     
-    public class FulfillOrderHandler(IBus bus) : ICommandHandler<FulfillOrderCommand>
+    public class FulfillOrderHandler(IPublishEndpoint publishEndpoint) : ICommandHandler<FulfillOrderCommand>
     {
         public async Task HandleAsync(FulfillOrderCommand command)
         {
             // Do order stuff;
 
             // Publish an event that the order was fulfilled
-            await bus.Publish(new OrderFulfilledEvent(command.OrderId));
+            await publishEndpoint.Publish(new OrderFulfilledEvent(command.OrderId));
         }
     }
 }

@@ -1,9 +1,24 @@
+using MassTransit;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddMassTransit(x =>
+{
+    var rabbitMQConfig = builder.Configuration.GetSection("RabbitMQ");
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(rabbitMQConfig["HostName"], "/", h =>
+        {
+            h.Username(rabbitMQConfig["Username"]);
+            h.Password(rabbitMQConfig["Password"]);
+        });
 
+        cfg.ConfigureEndpoints(context);
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
