@@ -1,3 +1,6 @@
+using Common.CommandHandler;
+using InvoiceService.Api.Consumers;
+using InvoiceService.Domain;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,8 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddDispatcher();
+builder.Services.AddCommandHandlers();
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumer<OrderFulfilledConsumer>();
+
     var rabbitMQConfig = builder.Configuration.GetSection("RabbitMQ");
     x.UsingRabbitMq((context, cfg) =>
     {
