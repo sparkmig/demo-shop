@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace OrderService.Api.HealthChecks
+namespace OrderService.Domain.HealthChecks
 {
     public class AvailabiltyHealthCheck : IHealthCheck
     {

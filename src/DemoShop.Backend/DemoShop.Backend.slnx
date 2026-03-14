@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/OrderService/">
+    <Project Path="OrderService.Domain/OrderService.Domain.csproj" Id="6d156997-009b-4993-8d58-7c7438bc2c1d" />
     <Project Path="OrderService/OrderService.Api.csproj" />
   </Folder>
 </Solution>

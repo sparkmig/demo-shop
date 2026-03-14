@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using OrderService.Api.HealthChecks;
+using OrderService.Domain.Configure;
+using OrderService.Domain.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddHealthChecks().AddCheck<AvailabiltyHealthCheck>(AvailabiltyHealthCheck.Name);
+builder.Services.AddHealthChecks()
+    .AddCheck<AvailabiltyHealthCheck>(AvailabiltyHealthCheck.Name)
+    .AddCheck<RabbitMQHealthCheck>(RabbitMQHealthCheck.Name);
+
+builder.Services.AddRabbitMQ();
+
 var app = builder.Build();
 
 app.UseHealthChecks("/health", new HealthCheckOptions()

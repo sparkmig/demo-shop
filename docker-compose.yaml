@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: demo-shop-rabbitmq
+    restart: unless-stopped
+    hostname: demo-shop-rabbitmq
+
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+
+    environment:
+      RABBITMQ_DEFAULT_USER: demo
+      RABBITMQ_DEFAULT_PASS: demo123
+
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+    networks:
+      - demo-shop-network
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  demo-shop-network:
+    driver: bridge
