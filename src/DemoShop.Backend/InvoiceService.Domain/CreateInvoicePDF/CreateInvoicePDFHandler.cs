@@ -1,5 +1,7 @@
 ﻿using Common.CommandHandler;
+using Common.IntegrationEvents;
 using InvoiceService.Infrastructure.Storage;
+using MassTransit;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -8,7 +10,7 @@ namespace InvoiceService.Domain.CreateInvoicePDF
 {
     public record CreateInvoicePDFCommand(Guid OrderId);
 
-    public class CreateInvoicePDFHandler(IPdfStorageService pdfStorageService) : ICommandHandler<CreateInvoicePDFCommand>
+    public class CreateInvoicePDFHandler(IPdfStorageService pdfStorageService, IPublishEndpoint publishEndpoint) : ICommandHandler<CreateInvoicePDFCommand>
     {
         public async Task HandleAsync(CreateInvoicePDFCommand command)
         {
@@ -17,6 +19,7 @@ namespace InvoiceService.Domain.CreateInvoicePDF
 
             byte[] body = GenerateInvoicePdf(command.OrderId);
             var url = await pdfStorageService.UploadPdfAsync(body, fileName);
+            await publishEndpoint.Publish(new InvoiceCreatedEvent(command.OrderId));
         }
 
         private byte[] GenerateInvoicePdf(Guid orderId)

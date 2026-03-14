@@ -1,6 +1,7 @@
 using Common.CommandHandler;
 using MassTransit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using OrderService.Api.Consumers;
 using OrderService.Domain;
 using OrderService.Domain.Configure;
 using OrderService.Domain.HealthChecks;
@@ -23,6 +24,8 @@ builder.Services.AddCommandHandlers();
 builder.Services.AddMassTransit(x =>
 {
     var rabbitMQConfig = builder.Configuration.GetSection("RabbitMQ");
+    x.AddConsumer<InvoiceCreatedConsumer>();
+
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host(rabbitMQConfig["HostName"], "/", h =>
