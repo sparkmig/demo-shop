@@ -11,7 +11,7 @@ namespace OrderService.Domain.Configure
     {
         public static void AddRabbitMQ(this IServiceCollection services)
         {
-            services.AddSingleton<IConnection>(sp =>
+            services.AddSingleton<IConnectionFactory>(sp =>
             {
                 var config = sp.GetService<IConfiguration>();
 
@@ -22,7 +22,7 @@ namespace OrderService.Domain.Configure
                     Password = config["RabbitMQ:Password"] ?? throw new MissingEnvironmentVariableException("RabbitMQ:Password")
                 };
 
-                return factory.CreateConnectionAsync().GetAwaiter().GetResult();
+                return factory;
             });
         }
     }

@@ -1,4 +1,7 @@
+using Common.CommandHandler;
+using MassTransit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using OrderService.Domain;
 using OrderService.Domain.Configure;
 using OrderService.Domain.HealthChecks;
 
@@ -13,8 +16,24 @@ builder.Services.AddHealthChecks()
     .AddCheck<AvailabiltyHealthCheck>(AvailabiltyHealthCheck.Name)
     .AddCheck<RabbitMQHealthCheck>(RabbitMQHealthCheck.Name);
 
-builder.Services.AddRabbitMQ();
 
+builder.Services.AddRabbitMQ();
+builder.Services.AddDispatcher();
+builder.Services.AddCommandHandlers();
+builder.Services.AddMassTransit(x =>
+{
+    var rabbitMQConfig = builder.Configuration.GetSection("RabbitMQ");
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(rabbitMQConfig["HostName"], "/", h =>
+        {
+            h.Username(rabbitMQConfig["Username"]);
+            h.Password(rabbitMQConfig["Password"]);
+        });
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
 var app = builder.Build();
 
 app.UseHealthChecks("/health", new HealthCheckOptions()
