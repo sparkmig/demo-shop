@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\InvoiceService.Domain\InvoiceService.Domain.csproj" />
+    <ProjectReference Include="..\InvoiceService.Infrastructure\InvoiceService.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

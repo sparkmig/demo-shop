@@ -1,6 +1,7 @@
 using Common.CommandHandler;
 using InvoiceService.Api.Consumers;
 using InvoiceService.Domain;
+using InvoiceService.Infrastructure;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddDispatcher();
 builder.Services.AddCommandHandlers();
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<OrderFulfilledConsumer>();

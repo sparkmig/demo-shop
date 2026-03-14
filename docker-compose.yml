@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: demo-shop-rabbitmq
+    restart: unless-stopped
+    hostname: demo-shop-rabbitmq
+
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+
+    environment:
+      RABBITMQ_DEFAULT_USER: demo
+      RABBITMQ_DEFAULT_PASS: demo123
+
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+    networks:
+      - demo-shop-network
+
+  minio:
+    image: quay.io/minio/minio:latest
+    container_name: demo-shop-minio
+    restart: unless-stopped
+    hostname: demo-shop-minio
+
+    ports:
+      - "9000:9000"   # API
+      - "9001:9001"   # Console UI
+
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+
+    command: server /data --console-address ":9001"
+
+    volumes:
+      - minio_data:/data
+
+    networks:
+      - demo-shop-network
+
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+volumes:
+  rabbitmq_data:
+  minio_data:
+
+networks:
+  demo-shop-network:
+    driver: bridge
