@@ -2,6 +2,7 @@
   <Folder Name="/InvoiceService/">
     <Project Path="InvoiceService.Api/InvoiceService.Api.csproj" Id="eb18f855-a2fe-4695-aa49-74a2410456c8" />
     <Project Path="InvoiceService.Domain/InvoiceService.Domain.csproj" Id="3f07a9df-49ad-46fe-8fe9-91f30a8b74dc" />
+    <Project Path="InvoiceService.Infrastructure/InvoiceService.Infrastructure.csproj" Id="c539d7ec-1a86-49a3-95c5-f864ee358d62" />
   </Folder>
   <Folder Name="/OrderService/">
     <Project Path="OrderService.Domain/OrderService.Domain.csproj" Id="6d156997-009b-4993-8d58-7c7438bc2c1d" />
